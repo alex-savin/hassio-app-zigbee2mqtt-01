@@ -14,10 +14,10 @@ Home Assistant does not natively support installing the same add-on twice. If yo
 |---------|-------|-------------|
 | Slug | `zigbee2mqtt` | `zigbee2mqtt-01` |
 | Data path | `/config/zigbee2mqtt` | `/config/zigbee2mqtt-01` |
-| Socat host port | 8485 | 8486 |
+| Socat host port | 6 | 8486 |
 | Image | `ghcr.io/zigbee2mqtt/zigbee2mqtt-{arch}` | `ghcr.io/alex-savin/zigbee2mqtt-01-{arch}` |
 
-> Internal container ports (8485 socat, 8099 frontend) remain unchanged. Only external host port mappings differ.
+> Internal container ports (8486 socat, 8091 frontend) remain unchanged. Only external host port mappings differ.
 
 ## Installation
 
