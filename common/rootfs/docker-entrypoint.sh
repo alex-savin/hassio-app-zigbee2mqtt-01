@@ -58,6 +58,7 @@ export NODE_PATH=/app/node_modules
 export ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED='true'
 export ZIGBEE2MQTT_CONFIG_FRONTEND_PORT='8091'
 export ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED='true'
+export ZIGBEE2MQTT_CONFIG_FRONTEND_URL='http://0.0.0.0:8091'
 export Z2M_ONBOARD_URL='http://0.0.0.0:8091'
 
 if bashio::config.true 'force_onboarding'; then

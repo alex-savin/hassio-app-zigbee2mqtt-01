@@ -51,7 +51,7 @@ COPY --from=dependencies_and_build /app/package.json /app/LICENSE /app/index.js 
 
 ENV NODE_ENV production
 
-HEALTHCHECK --interval=1m --timeout=3s --start-period=30s --start-interval=3s \
-  CMD curl -f http://localhost:8091/
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --start-interval=5s \
+  CMD curl -s http://localhost:8091/ > /dev/null || exit 1
 
 ENTRYPOINT [ "/sbin/tini", "--", "/docker-entrypoint.sh"]
