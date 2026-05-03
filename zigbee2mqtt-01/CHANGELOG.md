@@ -1,3 +1,6 @@
+## 2.10.0-1
+- Updated Zigbee2MQTT to version [`2.10.0`](https://github.com/Koenkk/zigbee2mqtt/releases/tag/2.10.0)
+
 ## 2.9.2-2
 - Fixed ingress 502 Bad Gateway by adding `ingress_port` and `ingress_protocol` to addon config
 - Added `ZIGBEE2MQTT_CONFIG_FRONTEND_URL` environment variable
