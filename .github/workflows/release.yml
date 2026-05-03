@@ -53,38 +53,39 @@ jobs:
 
   build-and-push:
     if: always() && (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && needs.release.result == 'success'))
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     needs: release
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: amd64
-            runner: ubuntu-latest
-          - arch: aarch64
-            runner: ubuntu-24.04-arm
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     steps:
       - uses: actions/checkout@v6
         with:
           ref: ${{ github.event_name == 'release' && github.event.release.tag_name || github.ref }}
 
-      - name: Log in to ghcr.io
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get addon version
+        id: addon
+        run: echo "version=$(jq -r '.version' zigbee2mqtt-01/config.json)" >> "$GITHUB_OUTPUT"
 
       - name: Prepare build context
         run: |
           cp -R common/rootfs zigbee2mqtt-01/
           cp common/Dockerfile zigbee2mqtt-01/
-          cp common/build.yaml zigbee2mqtt-01/
 
-      - name: Build and push
-        uses: home-assistant/builder@2026.03.2
+      - name: Build and push image
+        uses: home-assistant/builder/actions/build-image@2026.03.2
         with:
-          args: |
-            --${{ matrix.arch }} \
-            --target zigbee2mqtt-01 \
-            --no-cache
+          arch: amd64
+          context: ./zigbee2mqtt-01
+          image: ghcr.io/${{ github.repository_owner }}/zigbee2mqtt-01-amd64
+          image-tags: |
+            ${{ steps.addon.outputs.version }}
+            latest
+          version: ${{ steps.addon.outputs.version }}
+          push: "true"
+          cosign: "false"
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
+          build-args: |
+            BUILD_FROM=ghcr.io/home-assistant/amd64-base:3.22
+            BUILD_VERSION=${{ steps.addon.outputs.version }}
