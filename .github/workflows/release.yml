@@ -53,11 +53,16 @@ jobs:
 
   build-and-push:
     if: always() && (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && needs.release.result == 'success'))
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     needs: release
     strategy:
+      fail-fast: false
       matrix:
-        arch: [aarch64, amd64]
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v6
         with:
